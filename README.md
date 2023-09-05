@@ -39,3 +39,324 @@ O Real State é um projeto Back-end, desenvolvido com a finalidade de garantir s
 |12| GET        | /schedules/realEstate/:id  | Token obrigatório e ser admin          | lista todos os agendamentos do imóvel   |
 
 ## Detalhes dos EndPoints
+
+1. /login (POST)
+Body: Text Format - JSON
+Auth Types: No Authentication
+
+Requisição: 
+{
+	"email": "Insira o e-mail"
+	"password": "Insira a senha" 
+}
+
+Resposta:
+200 - Sucesso
+{
+	"token": "valor do Token"
+}
+
+##
+
+2. /users (POST)
+Body: Text Format - JSON
+Auth Types: No Authentication
+
+Requisição:
+{
+	"name": "Insira o nome completo, máximo de 80 caracteres e string",
+	"email": "Insira o e-mail, máximo de 50 caracteres e string",
+	"password": "Insira sua senha e string"
+}
+
+Resposta:
+200 - Sucesso
+	{
+		"id": "Id gerado em uuid",
+		"name": "Nome completo",
+		"email": "email",
+		"createdAt": "Data da criação da conta"
+	}
+
+Caso esteja faltando algum dado obrigatório,
+400 - Bad Request
+{
+    "message": "Informação do que está pendente"
+}
+
+Caso o e-mail cadastrado já exista,
+409 - Conflit
+{
+	"message": "email already exists"
+}
+
+##
+
+3. /users (GET)
+Body: No Body
+Auth Types: Bearer Token
+Resposta: 
+200 - Sucesso
+[
+	{
+		"id": "Id gerado de forma sequencial",
+		"name": "Nome completo",
+		"email": "email",
+		"createdAt": "Data da criação da conta"
+	},
+	{
+		"id": "Id gerado de forma sequencial",
+		"name": "Nome completo",
+		"email": "email",
+		"createdAt": "Data da criação da conta"
+	},
+]
+
+##
+
+4. /users/:id (PATCH)
+Body: Text Format - JSON
+Auth Types: Bearer Token
+Requisição:
+{
+    "campo(s)": "alteração"
+}
+Exemplo:
+{
+    "name": "Nome"
+}
+Resposta:
+200 - Sucesso
+{
+		"id": "Id gerado de forma sequencial",
+		"name": "Nome completo",
+		"email": "email",
+		"createdAt": "Data da criação da conta"
+}
+
+Caso esteja faltando algum dado obrigatório,
+400 - Bad Request
+{
+    "message": "Informação do que está pendente"
+}
+
+Caso o id não seja encontrado
+404 - Not Found
+{
+    "message": "user not found"
+}
+
+Caso o e-mail cadastrado já exista,
+409 - Conflit
+{
+	"message": "email already exists"
+}
+
+##
+
+5. /users (DELETE)
+Body: No Body
+Auth Types: Bearer Token
+Resposta:
+Em caso de sucesso
+204 - No Content
+
+Caso o id não seja encontrado
+404 - Not Found
+{
+    "message": "user not found"
+}
+
+##
+
+6. /categories (POST)
+Body: Text Format - JSON
+Auth Types: Bearer Token
+Requisição:
+{
+"name": "Casas Populares"
+}
+
+Resposta:
+200 - Sucesso
+{
+		"id": "Id gerado de forma sequencial",
+		"name": "Nome da Categoria criada",
+}
+
+##
+
+7. /categories (GET)
+Body: Text Format - JSON
+Auth Types: No Authentication
+Resposta: 
+200 - Sucesso
+[
+	{
+		"id": "Id gerado de forma sequencial",
+		"name": "Nome da Categoria criada",
+	},
+	{
+		"id": "Id gerado de forma sequencial",
+		"name": "Nome da Categoria criada",
+	},
+]
+
+##
+
+8. /categories/:id/realEstate (GET)
+Body: Text Format - JSON
+Auth Types: Bearer Token
+Resposta: 
+200 - Sucesso
+[
+  {
+    "id": "Id gerado de forma sequencial",
+    "sold": "Boleano que informa se o imóvel está vendida",
+    "value": "Valor do imóvel",
+    "size": "Tamanho do imóvel em m²",
+    "createdAt": "Data da criação do imóvel no sistema",
+    "updatedAt": "Data da atualização do imóvel no sistema",
+    "adress": {
+                 "id": "Id gerado de forma sequencial",
+                 "street": "Nome da rua",
+                 "zipCode": "CEP",
+                 "number": "Número do imóvel",
+                 "city": "Cidade do imóvel",
+                 "state": "Estado em que está localizado o imóvel"
+               },
+     "categories": {
+                    	"id": "Id gerado de forma sequencial",
+		                  "name": "Nome da Categoria criada",
+                    },
+     "schedules": {
+                      "id": "Id gerado de forma sequencial",
+                      "date": "Data do agendamento",
+                      "hour": "Horário do agendamento",
+                      "user": "Nome do usuário vinculado ao agendamento"
+                    }
+
+  },
+]
+
+##
+
+9. /realEstate (POST)
+Body: Text Format - JSON
+Auth Types: Bearer Token
+Requisição:
+{
+  "value": "Valor do imóvel",
+  "size": "Tamanho do imóvel em m²",
+  "address": {
+                 "street": "Nome da rua",
+                 "zipCode": "CEP",
+                 "number": "Número do imóvel",
+                 "city": "Cidade do imóvel",
+                 "state": "Estado em que está localizado o imóvel"
+    },
+   "category": {
+      "name": "Nome da Categoria",
+    },
+}
+
+Resposta:
+200 - Sucesso
+{
+  "id": "Id gerado de forma sequencial",
+  "value": "Valor do imóvel",
+  "size": "Tamanho do imóvel em m²",
+  "address": {
+                 "id": "Id gerado de forma sequencial",
+                 "street": "Nome da rua",
+                 "zipCode": "CEP",
+                 "number": "Número do imóvel",
+                 "city": "Cidade do imóvel",
+                 "state": "Estado em que está localizado o imóvel"
+    },
+   "category": {
+      "name": "Nome da Categoria",
+    },
+}
+
+##
+
+10. /realEstate (GET)
+Body: No Body
+Auth Types: No Authentication
+Resposta: 
+200 - Sucesso
+[
+    {
+      "value": "Valor do imóvel",
+      "size": "Tamanho do imóvel em m²",
+      "address": {
+                 "street": "Nome da rua",
+                 "zipCode": "CEP",
+                 "number": "Número do imóvel",
+                 "city": "Cidade do imóvel",
+                 "state": "Estado em que está localizado o imóvel"
+    },
+     "category": {
+        "name": "Nome da Categoria",
+    },
+    
+    "createdAt": "Data da criação do imóvel",
+    "updatedAt": "Data de atualização do imóvel",
+  }
+]
+
+##
+
+11. /schedules (POST)
+Body: Text Format - JSON
+Auth Types: Bearer Token
+Requisição:
+{
+    "date": "Data do agendamento",
+    "hour": "Horário do agendamento",
+}
+
+Resposta: 
+200 - Sucesso
+{
+      "id": "Id gerado de forma sequencial",
+      "date": "Data do agendamento",
+      "hour": "Horário do agendamento",
+      "user": "Nome do usuário vinculado ao agendamento"
+}
+
+##
+
+12. /schedules/realEstate/:id (GET)
+Body: No Body
+Auth Types: Bearer Token
+Resposta: 
+200 - Sucesso
+  {
+    "id": "Id gerado de forma sequencial",
+    "sold": "Boleano que informa se o imóvel está vendida",
+    "value": "Valor do imóvel",
+    "size": "Tamanho do imóvel em m²",
+    "createdAt": "Data da criação do imóvel no sistema",
+    "updatedAt": "Data da atualização do imóvel no sistema",
+    "adress": {
+                 "id": "Id gerado de forma sequencial",
+                 "street": "Nome da rua",
+                 "zipCode": "CEP",
+                 "number": "Número do imóvel",
+                 "city": "Cidade do imóvel",
+                 "state": "Estado em que está localizado o imóvel"
+               },
+     "categories": {
+                    	"id": "Id gerado de forma sequencial",
+		                  "name": "Nome da Categoria criada",
+                    },
+     "schedules": {
+                      "id": "Id gerado de forma sequencial",
+                      "date": "Data do agendamento",
+                      "hour": "Horário do agendamento",
+                      "user": "Nome do usuário vinculado ao agendamento"
+                    }
+
+  },
